@@ -10,6 +10,11 @@ let getTimeBeforeOneDayInNem = () => {
 	return Math.round((nowTime - NEM_EPOCH)/1000) - 24*60*60;
 }
 
+let getTimeBeforeTenDayInNem = () => {
+	let nowTime = new Date(new Date().setHours(0,0,0,0)).getTime();
+	return Math.round((nowTime - NEM_EPOCH)/1000) - 11*24*60*60;
+}
+
 let getTimeBeforeOneMonthInNem = () => {
 	let nowTime = new Date().getTime();
 	return Math.round((nowTime - NEM_EPOCH)/1000) - 30*24*60*60;
@@ -32,6 +37,7 @@ let getYearAddOneTimeInNem = (timeStamp) => {
 module.exports = {
 	getTimeInNem,
 	getTimeBeforeOneDayInNem,
+	getTimeBeforeTenDayInNem,
 	getTimeBeforeOneMonthInNem,
 	getTimeInReal,
 	convertToNemTime,

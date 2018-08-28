@@ -18,8 +18,8 @@ webapp.filter('to_trusted', ['$sce', function ($sce) {
 
 webapp.config(function($routeProvider) {
     $routeProvider
-    	.when('/', {
-            templateUrl: 'blocklist.html',
+        .when('/', {
+            templateUrl: 'home.html',
             controller: 'BlockController'
         })
         .when('/accountlist', {
@@ -29,6 +29,10 @@ webapp.config(function($routeProvider) {
         .when('/harvesterlist', {
             templateUrl: 'harvesterlist.html',
             controller: 'HarvesterController'
+        })
+        .when('/feeCalculator', {
+            templateUrl: 'feeCalculator.html',
+            controller: 'FeeCalculatorController'
         })
         .when('/harvestingCalculator', {
             templateUrl: 'harvestingCalculator.html',
@@ -97,6 +101,10 @@ webapp.config(function($routeProvider) {
         .when('/s_tx', {
             templateUrl: 's_tx.html',
             controller: 'SearchTXController'
+        })
+        .when('/s_blocktx', {
+            templateUrl: 's_blocktx.html',
+            controller: 'BlockController'
         })
         .when('/logs', {
             templateUrl: 'logs.html'

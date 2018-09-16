@@ -1,12 +1,12 @@
 <div id="content" class="container fontSize12" style="padding-top:10px;padding-bottom:70px;">
 	<h4>Account Detail</h4>
-	<table class="table table-striped table-hover well well-large">
+	<table class="hover">
 		<tr ng-repeat="accountItem in accountItems" style="line-height:26px;">
 			<td width="20%"><span ng-bind="accountItem.label"></span></td>
 			<td ng-bind-html="accountItem.content | to_trusted"></td>
 		</tr>
 	</table>
-	<ul class="nav nav-tabs" role="tablist" id="optionAccountTab" style="margin-top: 40px;" ng-class="{hidden:!addressExist}">
+	<ul class="nav nav-tabs" role="tablist" id="optionAccountTab" style="margin-top: 40px;" ng-class="{hide:!addressExist}">
 		<li role="presentation" class="active">
 			<a href="#mosaics" role="tab" data-toggle="tab">
 				<span style="font-weight: bold;">Owned Mosaics</span>
@@ -23,9 +23,9 @@
 			</a>
 		</li>
 	</ul>
-	<div class="tab-content" ng-class="{hidden:!addressExist}">
+	<div class="tab-content" ng-class="{hide:!addressExist}">
 		<div role="tabpanel" class="tab-pane active" id="mosaics">
-			<table class="table table-striped table-hover">
+			<table class="hover">
 				<thead>
 					<tr>
 						<td>#</td>
@@ -34,7 +34,7 @@
 					</tr>
 				</thead>
 				<tbody class="well well-large">
-					<tr ng-class="{hidden:mosaicList&&mosaicList.length>0}">
+					<tr ng-class="{hide:mosaicList&&mosaicList.length>0}">
 						<td colspan="3">Nothing to show</td>
 					</tr>
 					<tr ng-repeat="m in mosaicList">
@@ -46,7 +46,7 @@
 			</table>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="namespaces">
-			<table class="table table-striped table-hover">
+			<table class="hover">
 				<thead>
 					<tr>
 						<td>#</td>
@@ -55,7 +55,7 @@
 					</tr>
 				</thead>
 				<tbody class="well well-large">
-					<tr ng-class="{hidden:namespaceList&&namespaceList.length>0}">
+					<tr ng-class="{hide:namespaceList&&namespaceList.length>0}">
 						<td colspan="3">Nothing to show</td>
 					</tr>
 					<tr ng-repeat="ns in namespaceList">
@@ -67,17 +67,17 @@
 			</table>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="harvest">
-			<table class="table table-striped table-hover well well-large">
-				<thead>
+			<table class="hover well well-large">
+				<tbody>
 					<tr ng-repeat="harvestItem in harvestItems" style="line-height:26px;">
 						<td style="width:240px;"><span ng-bind="harvestItem.label"></span></td>
 						<td ng-bind-html="harvestItem.content | to_trusted"></td>
 					</tr>
-				</thead>
+				</tbody>
 			</table>
 		</div>
 	</div>
-	<ul class="nav nav-tabs" role="tablist" id="optionTransactionTab" style="margin-top: 40px;" ng-class="{hidden:!addressExist}">
+	<ul class="nav nav-tabs" role="tablist" id="optionTransactionTab" style="margin-top: 40px;" ng-class="{hide:!addressExist}">
 		<li role="presentation" class="active">
 			<a href="#transactions" role="tab" data-toggle="tab">
 				<span style="font-weight: bold;">Transactions</span>
@@ -89,10 +89,10 @@
 			</a>
 		</li>
 	</ul>
-	<div class="tab-content" ng-class="{hidden:!addressExist}">
+	<div class="tab-content" ng-class="{hide:!addressExist}">
 		<div role="tabpanel" class="tab-pane active" id="transactions">
 			<div infinite-scroll="loadTransactions()" infinite-scroll-immediate-check="false" infinite-scroll-disabled="loadingFlag">
-				<table class="table table-striped table-hover">
+				<table class="hover">
 					<thead>
 						<tr>
 							<td>#</td>
@@ -111,8 +111,8 @@
 							<td ng-bind="$index+1" width="50"></td>
 							<td ng-bind="tx.timeStamp" width="160"></td>
 							<td>
-								<span style="color:green" ng-class="{hidden:tx.flow!=0}" ng-bind="tx.amount"></span>
-								<span style="color:red" ng-class="{hidden:tx.flow!=1}" ng-bind="tx.amount"></span>
+								<span style="color:green" ng-class="{hide:tx.flow!=0}" ng-bind="tx.amount"></span>
+								<span style="color:red" ng-class="{hide:tx.flow!=1}" ng-bind="tx.amount"></span>
 							</td>
 							<td ng-bind="tx.fee" width="80"></td>
 							<td width="360"><a href="#s_account?account={{tx.sender}}" target="_blank"><span class="noDetail" ng-bind="tx.sender"></span></a></td>
@@ -125,7 +125,7 @@
 		</div>
 		<div role="tabpanel" class="tab-pane" id="mosaicTransactions">
 			<div infinite-scroll="loadMosaicTransactions()" infinite-scroll-immediate-check="false" infinite-scroll-disabled="loadingMosaicFlag">
-				<table class="table table-striped table-hover">
+				<table class="hover">
 					<thead>
 						<tr>
 							<td>#</td>
@@ -147,8 +147,8 @@
 								<span ng-bind="tx.mosaicName"></span>
 							</td>
 							<td width="110">
-								<span style="color:green" ng-class="{hidden:tx.flow==1}" ng-bind="tx.quantity"></span>
-								<span style="color:red" ng-class="{hidden:tx.flow==0}" ng-bind="tx.quantity"></span>
+								<span style="color:green" ng-class="{hide:tx.flow==1}" ng-bind="tx.quantity"></span>
+								<span style="color:red" ng-class="{hide:tx.flow==0}" ng-bind="tx.quantity"></span>
 							</td>
 							<td width="350"><a href="#s_account?account={{tx.sender}}" target="_blank"><span class="noDetail" ng-bind="tx.sender"></span></a></td>
 							<td width="350"><a href="#s_account?account={{tx.recipient}}" target="_blank"><span class="noDetail" ng-bind="tx.recipient"></span></a></td>
@@ -160,14 +160,14 @@
 		</div>
 	</div>
 	<div class="modal fade" id="txDetail" tabindex="-1" role="dialog">
-		<div class="modal-dialog" style="width:900px;">
+		<div class="modal-dialog">
 	    	<div class="modal-content">
 	        	<div class="modal-header">
-	            	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	            	<button type="button" class="close-button" data-dismiss="modal" aria-hidden="true" data-close>&times;</button>
 	            	<h5 class="modal-title"><b>Transaction Detail</b></h5>
 		         </div>
 		         <div class="modal-body">
-		         	<table>
+		         	<table class="hover">
 		         		<tr style="line-height:26px;">
 							<td style="width:140px;">
 								Hash&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

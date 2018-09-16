@@ -2,7 +2,7 @@
 	<h4>Namespace Detail</h4>
 	<div ng-if="!namespaceList" style="font-size: 16px;line-height:50px;" ng-bind="message"></div>
 	<div ng-if="namespaceList">
-		<table class="table table-striped table-hover well well-large">
+		<table class="hover well well-large">
 			<tr>
 				<td width="220">Namespace (sub-namespaces)</td>
 				<td>
@@ -21,7 +21,7 @@
 				<td>CreateTime</td>
 				<td ng-bind="select.timeStamp"></td>
 			</tr>
-			<tr ng-class="{hidden: select.namespace!=select.rootNamespace}">
+			<tr ng-class="{hide: select.namespace!=select.rootNamespace}">
 				<td>ExpiredTime</td>
 				<td ng-bind="select.expiredTime"></td>
 			</tr>
@@ -34,7 +34,7 @@
 				</td>
 			</tr>
 		</table>
-		<ul class="nav nav-tabs" role="tablist" id="tab" style="margin-top: 40px;" ng-class="{hidden:!select}">
+		<ul class="nav nav-tabs" role="tablist" id="tab" style="margin-top: 40px;" ng-class="{hide:!select}">
 			<li role="presentation" class="active">
 				<a role="tab" data-toggle="tab">
 					<span style="font-weight: bold;">
@@ -43,9 +43,9 @@
 				</a>
 			</li>
 		</ul>
-		<div class="tab-content" ng-class="{hidden:!select}">
+		<div class="tab-content" ng-class="{hide:!select}">
 			<div role="tabpanel" class="tab-pane active" id="mosaics">
-				<table class="table table-striped table-hover">
+				<table class="hover">
 					<thead>
 						<tr>
 							<td>#</td>

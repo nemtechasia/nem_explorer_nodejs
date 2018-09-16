@@ -3513,6 +3513,7 @@ tbody.collapse.in {
 .dropup,
 .dropdown {
   position: relative;
+  display: inline-block
 }
 .dropdown-toggle:focus {
   outline: 0;
@@ -3585,7 +3586,7 @@ tbody.collapse.in {
   background-image: none;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
-.open > .dropdown-menu {
+.dropdown:hover .dropdown-menu {
   display: block;
 }
 .open > a {

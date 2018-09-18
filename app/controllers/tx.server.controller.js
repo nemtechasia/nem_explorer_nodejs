@@ -4,6 +4,7 @@ import nis from '../utils/nisRequest';
 import address from '../utils/address';
 import message from '../utils/message';
 import mosaicDB from '../db/mosaicDB';
+import timeUtil from '../utils/timeUtil';
 
 const TXLISTSIZE = 10;
 
@@ -13,54 +14,54 @@ module.exports = {
      * get transactions list
      */
 	txList: (req, res, next) => {
-		try {
-			let Transaction = mongoose.model('Transaction');
-			let skip = (req.body.page-1)*TXLISTSIZE;
-			let type = req.body.type;
-			let conditions = {};
-			if(type=="transfer")
-				conditions.type = 257;
-			else if(type=="importance")
-				conditions.type = 2049;
-			else if(type=="multisig")
-				conditions.type = 4100;
-			else if(type=="namespace")
-				conditions.type = 8193;
-			else if(type=="mosaic")
-				conditions = {"$or":[{type: 16385}, {type: 16386}, {mosaicTransferFlag: 1}]};
-			else if(type=="apostille")
-				conditions.apostilleFlag = 1;
-			else if(type=="aggregate")
-				conditions.aggregateFlag = 1;
-			Transaction.find(conditions).sort({height: -1, timeStamp: -1}).skip(skip).limit(TXLISTSIZE).exec((err, doc) => {
-				if(err) {
-					console.info(err);
-					return res.json([]);
-				}
-				let r_txArray = [];
-				let r_tx = null;	
-				doc.forEach(item => {
-					r_tx = {};
-					r_tx.hash = item.hash;
-					r_tx.height = item.height;
-					r_tx.sender = item.sender;
-					r_tx.recipient = item.recipient;
-					r_tx.amount = item.amount;
-					r_tx.fee = item.fee;
-					r_tx.timeStamp = item.timeStamp;
-					r_tx.signature = item.signature;
-					r_tx.type = item.type;
-					r_tx.apostilleFlag = item.apostilleFlag;
-					r_tx.mosaicTransferFlag = item.mosaicTransferFlag;
-					r_tx.aggregateFlag = item.aggregateFlag;
-					r_txArray.push(r_tx);
-				});
-				res.json(r_txArray);
-			});
-		} catch (e) {
-			console.error(e);
-		}
-	},
+    try {
+      let Transaction = mongoose.model('Transaction');
+      let skip = (req.body.page-1)*TXLISTSIZE;
+      let type = req.body.type;
+      let conditions = {};
+      if(type=="transfer")
+        conditions.type = 257;
+      else if(type=="importance")
+        conditions.type = 2049;
+      else if(type=="multisig")
+        conditions.type = 4100;
+      else if(type=="namespace")
+        conditions.type = 8193;
+      else if(type=="mosaic")
+        conditions = {"$or":[{type: 16385}, {type: 16386}, {mosaicTransferFlag: 1}]};
+      else if(type=="apostille")
+        conditions.apostilleFlag = 1;
+      else if(type=="aggregate")
+        conditions.aggregateFlag = 1;
+      Transaction.find(conditions).sort({height: -1, timeStamp: -1}).skip(skip).limit(TXLISTSIZE).exec((err, doc) => {
+        if(err) {
+          console.info(err);
+          return res.json([]);
+        }
+        let r_txArray = [];
+        let r_tx = null;  
+        doc.forEach(item => {
+          r_tx = {};
+          r_tx.hash = item.hash;
+          r_tx.height = item.height;
+          r_tx.sender = item.sender;
+          r_tx.recipient = item.recipient;
+          r_tx.amount = item.amount;
+          r_tx.fee = item.fee;
+          r_tx.timeStamp = item.timeStamp;
+          r_tx.signature = item.signature;
+          r_tx.type = item.type;
+          r_tx.apostilleFlag = item.apostilleFlag;
+          r_tx.mosaicTransferFlag = item.mosaicTransferFlag;
+          r_tx.aggregateFlag = item.aggregateFlag;
+          r_txArray.push(r_tx);
+        });
+        res.json(r_txArray);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  },
 
 	/**
      * get tx detail
@@ -240,7 +241,134 @@ module.exports = {
 		} catch (e) {
 			console.error(e);
 		}
+	},
+
+	reportTx:(req, res, next)=>{
+		  try {
+	  let Transaction = mongoose.model('Transaction');	
+			let skip = (req.body.page-1)*TXLISTSIZE;
+			let type = req.body.type;	
+      let tenTime = timeUtil.getTimeBeforeTenDayInNem();
+      let nineTime = tenTime + 86399;
+      let eightTime = nineTime + 86400;
+      let sevenTime = eightTime + 86400;
+      let sixTime = sevenTime + 86400;
+      let fiveTime = sixTime + 86400;
+      let fourTime = fiveTime + 86400;
+      let threeTime = fourTime + 86400;
+      let twoTime = threeTime + 86400;
+      let oneTime = twoTime + 86400;
+      let todayTime = timeUtil.getTimeBeforeOneFullDayInNem();
+      Transaction.aggregate([{"$match":{timeStamp : {"$gte": tenTime}}},{"$group":{
+  _id: "$__v",
+  count0910: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gte":["$timeStamp",tenTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",nineTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0809: {
+    "$sum":{ "$cond": [{$and:[
+    {"$cond":[{"$gt":["$timeStamp",nineTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",eightTime]},1,0]}
+    ]},
+    1,0]}
+  },
+   count0708: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",eightTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",sevenTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0607: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",sevenTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",sixTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0506: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",sixTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",fiveTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0405: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",fiveTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",fourTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0304: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",fourTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",threeTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0203: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",threeTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",twoTime]},1,0]}
+    ]},
+    1,0]}
+  },
+  count0102: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",twoTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",oneTime]},1,0]}
+    ]},
+    1,0]}
+  },
+    count0001: {
+    "$sum":{ "$cond": [{"$and":[
+    {"$cond":[{"$gt":["$timeStamp",oneTime]},1,0]},
+    {"$cond":[{"$lte":["$timeStamp",todayTime]},1,0]}
+    ]},
+    1,0]}
+  }
+}}]).exec((err, results) => {
+	if(err) {
+		console.info(err);
+		return res.json([]);
 	}
+	let r_txGraph = [];
+	let r_tx = {};
+	results.forEach(item=>{
+		r_tx.c1=item.count0910;
+		r_tx.c2=item.count0809;
+		r_tx.c3=item.count0708;
+		r_tx.c4=item.count0607;
+		r_tx.c5=item.count0506;
+		r_tx.c6=item.count0405;
+		r_tx.c7=item.count0304;
+		r_tx.c8=item.count0203;
+		r_tx.c9=item.count0102;
+		r_tx.c10=item.count0001;
+	})
+	r_txGraph.push(r_tx.c10);
+	r_txGraph.push(r_tx.c9);
+	r_txGraph.push(r_tx.c8);
+	r_txGraph.push(r_tx.c7);
+	r_txGraph.push(r_tx.c6);
+	r_txGraph.push(r_tx.c5);
+	r_txGraph.push(r_tx.c4);
+	r_txGraph.push(r_tx.c3);
+	r_txGraph.push(r_tx.c2);
+	r_txGraph.push(r_tx.c1);
+
+	res.json(r_txGraph);
+});
+		} catch (e) {
+			console.error(e);
+		}
+		
+	}
+
 };
 
 let checkApostilleAndMosaicTransferFromTX = (tx) => {

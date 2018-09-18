@@ -41,8 +41,8 @@ let init = (server) => {
 			//query max block height from DB
 			transactionDB.findOneTransactionSortHeight(doc => {
 				let heightDB = 0;
-				if(doc && doc.height) 
-					heightDB = doc.height-1;
+				 if(doc && doc.height) 
+				 	heightDB = doc.height-1;
 				//testing
 				if(heightDB < config.nisInitStartBlock)
 					heightDB = config.nisInitStartBlock;

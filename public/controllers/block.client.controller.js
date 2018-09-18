@@ -69,6 +69,9 @@ function BlockController($scope, $timeout, $interval, BlockService, TXService){
 	$scope.showBlockTxes = function(txes, index, $event){
 		$scope.currentBlock = $scope.blockList[index];
 		$scope.selectedBlockHeight = $scope.currentBlock.height;
+		var targetWidth = 569;
+		var x = document.getElementById("blockBig");
+		w = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
 		//just skip the action when click from <a>
 		if($event!=null && $event.target!=null && $event.target.className.indexOf("noDetail")!=-1){
 			return;
@@ -98,6 +101,13 @@ function BlockController($scope, $timeout, $interval, BlockService, TXService){
 		}
 		if(txArr.length>0){
 			$scope.showBlockTxesFlag = true;
+			if ( w < targetWidth) {
+				x.style.display == "none";
+				$("#blockSmall").modal("show");
+			}
+			else {
+				$("#blockSmall").modal("hide");
+			}
 		} else {
 			$scope.showBlockTxesFlag = false;
 		}
